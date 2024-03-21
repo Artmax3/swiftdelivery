@@ -6,7 +6,7 @@ const HomeScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>SwiftDelivery</Text>
       <Image
-        source={require('./placeholder.jpg')}
+        source={require('./logo.png')}
         style={styles.logo}
       />
       <Text style={styles.subtitle}>Let's Get Started</Text>
@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: 250,
+    height: 250,
     resizeMode: 'contain',
     marginBottom: 10,
   },
