@@ -10,13 +10,13 @@ const AuthorizationScreen = ({ navigation }) => {
       />
       <Button
         title="Sign In"
-        //onPress={() => navigation.navigate('SignIn')}
+        onPress={() => navigation.navigate('SignIn')}
         style={styles.button}
       />
       <Text>OR</Text>
       <Button
         title="Sign Up"
-        //onPress={() => navigation.navigate('SignUp')}
+        onPress={() => navigation.navigate('SignUp')}
         style={styles.button}
       />
       <Button
