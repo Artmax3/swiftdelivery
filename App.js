@@ -6,10 +6,8 @@ import OrderScreen from './OrderScreen.js';
 import AuthorizationScreen from './AuthorizationScreen.js';
 import AddressScreen from './AddressScreen.js';
 import CheckoutScreen from './CheckoutScreen.js';
+// import OrderUpdatesScreen from './OrderUpdatesScreen';
 import { StripeProvider } from '@stripe/stripe-react-native';
-import AvailableStores from './AvailableStores.js';
-import StoreDetails from './StoreDetails.js';
-import Cart from './Cart.js';
 
 const Stack = createStackNavigator();
 
@@ -22,9 +20,7 @@ const App = () => {
         <Stack.Screen name="Auth" component={AuthorizationScreen} />
         <Stack.Screen name="Address" component={AddressScreen} />
         <Stack.Screen name="Checkout" component={CheckoutScreen} />
-        <Stack.Screen name="Restaurant" component={AvailableStores} />
-        <Stack.Screen name="Menu" component={StoreDetails} />
-        <Stack.Screen name="Cart" component={Cart} />
+        {/* <Stack.Screen name="OrderUpdates" component={OrderUpdatesScreen} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
