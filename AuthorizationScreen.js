@@ -37,6 +37,12 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 20,
   },
+  logo: {
+    width: 250,
+    height: 250,
+    resizeMode: 'contain',
+    marginBottom: 10,
+  },
 });
 
 export default AuthorizationScreen;
