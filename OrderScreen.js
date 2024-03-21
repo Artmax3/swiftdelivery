@@ -1,6 +1,7 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
 import MenuItem from './MenuItem.js';
+import { View, Text, FlatList, Button, StyleSheet, Alert } from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const restaurantData = [
   {
@@ -21,7 +22,26 @@ const restaurantData = [
   },
 ];
 
-const OrdersScreen = () => {
+const OrdersScreen = ({ navigation }) => { // Make sure to receive the navigation prop here
+  // State for handling the visibility of the date picker
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  // State for storing the selected date
+  const [selectedDate, setSelectedDate] = useState('');
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    setSelectedDate(date.toString()); // Convert date to string or handle as necessary
+    hideDatePicker();
+    Alert.alert("Order Scheduled", `Your order has been scheduled for ${date}`);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Your Orders</Text>
@@ -45,6 +65,16 @@ const OrdersScreen = () => {
           </View>
         )}
       />
+      <Button title="Schedule Order" onPress={showDatePicker} />
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="datetime"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
+      {selectedDate ? <Text>Scheduled for: {selectedDate}</Text> : null}
+      {/* Add the Proceed to Checkout button here */}
+      <Button title="Proceed to Checkout" onPress={() => navigation.navigate('Checkout')} />
     </View>
   );
 };
@@ -67,6 +97,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+  // Add any additional styles you need here
 });
 
 export default OrdersScreen;
