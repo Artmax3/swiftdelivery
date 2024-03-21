@@ -24,6 +24,11 @@ const AuthorizationScreen = ({ navigation }) => {
         onPress={() => navigation.navigate('Address')}
         style={styles.button}
       />
+      <Button
+        title="Restaurants"
+        onPress={() => navigation.navigate('Restaurant')}
+        style={styles.button}
+      />
     </View>
   );
 };
