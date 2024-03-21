@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
-import OrderItem from './OrderItem'; // Asumiendo que tienes un componente OrderItem para mostrar un elemento de historial de pedidos
+import OrderItem from './OrderItem';
 
 const orderHistoryData = [
   {
