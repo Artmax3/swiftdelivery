@@ -5,7 +5,7 @@ const AuthorizationScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={require('./placeholder.jpg')}
+        source={require('./logo.png')}
         style={styles.logo}
       />
       <Button
