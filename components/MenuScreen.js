@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Button, Alert } from 'react-native';
 
-const StoreDetails = ({ route, navigation }) => {
+const Menu = ({ route, navigation }) => {
   const { store } = route.params;
 
   const [menuItems, setMenuItems] = useState([
-    { id: 1, name: 'Noodles', price: '$5.99' },
-    { id: 2, name: 'Dumpling', price: '$7.49' },
-    { id: 3, name: 'Butter Chicken', price: '$4.99' },
-    { id: 4, name: 'Biryani', price: '$6.99' },
+    { id: 1, name: 'Noodles', price: 5.99 },
+    { id: 2, name: 'Dumpling', price: 7.49 },
+    { id: 3, name: 'Butter Chicken', price: 4.99 },
+    { id: 4, name: 'Biryani', price: 6.99 },
   ]);
 
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (item) => {
     setCartItems([...cartItems, item]);
+    Alert.alert("Item Added to the cart!");
   };
 
   const renderMenuItem = ({ item }) => (
     <View style={styles.menuItem}>
       <Text style={styles.itemName}>{item.name}</Text>
-      <Text style={styles.itemPrice}>{item.price}</Text>
+      <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
       <Button title="Add to Cart" onPress={() => addToCart(item)} />
     </View>
   );
@@ -36,7 +37,6 @@ const StoreDetails = ({ route, navigation }) => {
         keyExtractor={item => item.id.toString()}
       />
       <Button title="View Cart" onPress={() => navigation.navigate('Cart', { cartItems })} />
-
     </View>
   );
 };
@@ -80,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StoreDetails;
+export default Menu;
