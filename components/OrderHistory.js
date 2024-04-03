@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
 
 const orderHistoryData = [
   {
@@ -49,6 +49,10 @@ const OrderItem = ({ name, quantity, price }) => (
   </View>
 );
 
+const printReceipt = (orderId) => {
+  console.log(`Printing receipt for order ${orderId}`);
+};
+
 const OrderHistoryScreen = () => {
   return (
     <View style={styles.container}>
@@ -74,6 +78,7 @@ const OrderHistoryScreen = () => {
                 />
               )}
             />
+            <Button title="Print Receipt" onPress={() => printReceipt(item.id)} />
           </View>
         )}
       />
