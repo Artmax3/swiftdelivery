@@ -19,7 +19,7 @@ const AvailableStores = ({ navigation }) => {
                 const userData = snapshot.val();
                 setUserName(userData.firstName + ' ' + userData.lastName);
             } else {
-                setUserName('User Not Found'); 
+                setUserName('User Not Found');
             }
         });
         setStores(storesData.stores);
@@ -34,12 +34,18 @@ const AvailableStores = ({ navigation }) => {
                     <Text style={[styles.storeStatus, { color: item.isOpen ? 'green' : 'red' }]}>
                         {checkIfStoreIsOpen(item)}
                     </Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('CustomerReviews')}>
+                        <Text style={styles.businessProfileButton}>Reviews</Text>
+                    </TouchableOpacity>
                 </TouchableOpacity>
             ) : (
                 <View style={[styles.storeItem, { backgroundColor: '#eee' }]}>
                     <Text style={styles.storeName}>{item.name}</Text>
                     <Text style={styles.storeLocation}>{item.location}</Text>
                     <Text style={[styles.storeStatus, { color: 'red' }]}>Closed</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('CustomerReviews')}>
+                        <Text style={styles.businessProfileButton}>Reviews</Text>
+                    </TouchableOpacity>
                 </View>
             )}
         </View>
@@ -48,6 +54,14 @@ const AvailableStores = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.header}>Welcome, {userName}!</Text>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity onPress={() => navigation.navigate('OrderHistory')}>
+                    <Text style={styles.businessProfileButton}>Order History</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('BusinessProfile')}>
+                    <Text style={styles.businessProfileButton}>Business Profile</Text>
+                </TouchableOpacity>
+            </View>
             <Text style={styles.sectionTitle}>Available Stores:</Text>
             <FlatList
                 data={stores}
@@ -93,6 +107,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         marginTop: 5,
+    },
+    businessProfileButton: {
+        fontSize: 13,
+        color: 'blue',
+        fontWeight: 100,
+        textDecorationLine: 'underline',
+        marginBottom: 20,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
 });
 
