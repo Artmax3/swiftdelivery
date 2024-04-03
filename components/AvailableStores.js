@@ -1,13 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import storesData from '../data/restro.json';
+import { db, auth } from '../firebaseConfig';
+import { ref, onValue } from 'firebase/database';
 
 const AvailableStores = ({ navigation }) => {
-    const stores = [
-        { id: 1, name: 'Hakka Restaurant', location: '123 Main St' },
-        { id: 2, name: 'Chinese Restaurant', location: '456 Dundas St' },
-        { id: 3, name: 'Indian Restaurant', location: '789 Ann St' },
-        { id: 4, name: 'IndiMex Restaurant', location: '321 Emery St' },
-    ];
+    const [userName, setUserName] = useState('');
+    const [stores, setStores] = useState([]);
+
+    useEffect(() => {
+        // Fetch the user's name from the Realtime Database based on the logged-in user's UID
+        // Assuming this part remains unchanged
+        const userID = auth.currentUser.uid;
+        const userRef = ref(db, 'users/' + userID);
+
+        // Listen for changes in the user's data
+        onValue(userRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
+                setUserName(userData.firstName + ' ' + userData.lastName);
+            } else {
+                setUserName('User Not Found'); // Handle the case where user data is not found
+            }
+        });
+
+        // Set the stores from the imported JSON data
+        setStores(storesData.stores);
+    }, []);
 
     const renderStoreItem = ({ item }) => (
         <TouchableOpacity onPress={() => navigation.navigate('Menu', { store: item })} style={styles.storeItem}>
@@ -18,11 +37,12 @@ const AvailableStores = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.header}>Welcome, {userName}!</Text>
             <Text style={styles.sectionTitle}>Available Stores:</Text>
             <FlatList
                 data={stores}
                 renderItem={renderStoreItem}
-                keyExtractor={item => item.id.toString()}
+                keyExtractor={(item, index) => (item.id || index).toString()} // Provide a default value if id is undefined
                 contentContainerStyle={{ paddingBottom: 20 }}
             />
         </View>
@@ -35,6 +55,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 20,
+    },
+    header: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
     },
     sectionTitle: {
         fontSize: 20,

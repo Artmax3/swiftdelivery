@@ -1,0 +1,119 @@
+{
+    "stores": [
+      {
+        "name": "Delicious Delights",
+        "location": "123 Dundas Street, London, Canada",
+        "menu": [
+          {
+            "category": "Appetizers",
+            "items": [
+              {
+                "name": "Garlic Bread",
+                "price": 5.99
+              },
+              {
+                "name": "Bruschetta",
+                "price": 7.99
+              },
+              {
+                "name": "Caprese Salad",
+                "price": 8.99
+              }
+            ]
+          },
+          {
+            "category": "Main Courses",
+            "items": [
+              {
+                "name": "Spaghetti Carbonara",
+                "price": 12.99
+              },
+              {
+                "name": "Margherita Pizza",
+                "price": 10.99
+              },
+              {
+                "name": "Grilled Salmon",
+                "price": 15.99
+              }
+            ]
+          },
+          {
+            "category": "Desserts",
+            "items": [
+              {
+                "name": "Tiramisu",
+                "price": 6.99
+              },
+              {
+                "name": "Cheesecake",
+                "price": 7.99
+              },
+              {
+                "name": "Chocolate Fondant",
+                "price": 8.99
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Tasty Treats",
+        "location": "456 Tecumseh Avenue, London, Canada",
+        "menu": [
+          {
+            "category": "Appetizers",
+            "items": [
+              {
+                "name": "Mozzarella Sticks",
+                "price": 6.99
+              },
+              {
+                "name": "Chicken Wings",
+                "price": 8.99
+              },
+              {
+                "name": "Nachos",
+                "price": 9.99
+              }
+            ]
+          },
+          {
+            "category": "Main Courses",
+            "items": [
+              {
+                "name": "Steak",
+                "price": 19.99
+              },
+              {
+                "name": "Burger",
+                "price": 12.99
+              },
+              {
+                "name": "Pasta Primavera",
+                "price": 14.99
+              }
+            ]
+          },
+          {
+            "category": "Desserts",
+            "items": [
+              {
+                "name": "Ice Cream Sundae",
+                "price": 5.99
+              },
+              {
+                "name": "Apple Pie",
+                "price": 6.99
+              },
+              {
+                "name": "Brownie",
+                "price": 4.99
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  

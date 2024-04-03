@@ -1,30 +1,44 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Button, Alert } from 'react-native';
+import storeMenusData from '../data/restro.json';
 
 const Menu = ({ route, navigation }) => {
   const { store } = route.params;
 
-  const [menuItems, setMenuItems] = useState([
-    { id: 1, name: 'Noodles', price: 5.99 },
-    { id: 2, name: 'Dumpling', price: 7.49 },
-    { id: 3, name: 'Butter Chicken', price: 4.99 },
-    { id: 4, name: 'Biryani', price: 6.99 },
-  ]);
+  const stores = storeMenusData.stores;
+
+  const storeMenu = stores.find(s => s.name === store.name)?.menu || [];
+  
+  const menuItems = storeMenu.reduce((acc, category) => {
+    acc.push({ category: category.category, isCategory: true });
+    acc = acc.concat(category.items);
+    return acc;
+  }, []);
 
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (item) => {
-    setCartItems([...cartItems, item]);
-    Alert.alert("Item Added to the cart!");
+    setCartItems(currentItems => [...currentItems, item]);
+    Alert.alert("Item Added to Cart!");
   };
 
-  const renderMenuItem = ({ item }) => (
-    <View style={styles.menuItem}>
-      <Text style={styles.itemName}>{item.name}</Text>
-      <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
-      <Button title="Add to Cart" onPress={() => addToCart(item)} />
-    </View>
-  );
+  const renderMenuItem = ({ item }) => {
+    if (item.isCategory) {
+      return (
+        <View style={styles.category}>
+          <Text style={styles.categoryText}>{item.category}</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.menuItem}>
+          <Text style={styles.itemName}>{item.name}</Text>
+          <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
+          <Button title="Add to Cart" onPress={() => addToCart(item)} />
+        </View>
+      );
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -34,7 +48,7 @@ const Menu = ({ route, navigation }) => {
       <FlatList
         data={menuItems}
         renderItem={renderMenuItem}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item, index) => `${item.name}-${index}`}
       />
       <Button title="View Cart" onPress={() => navigation.navigate('Cart', { cartItems })} />
     </View>
@@ -61,6 +75,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+  },
+  category: {
+    backgroundColor: '#ccc',
+    padding: 10,
+    marginBottom: 10,
+  },
+  categoryText: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   menuItem: {
     flexDirection: 'row',
