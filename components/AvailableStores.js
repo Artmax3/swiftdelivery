@@ -1,13 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import storesData from '../data/restro.json';
+import { db, auth } from '../firebaseConfig';
+import { ref, onValue } from 'firebase/database';
 
 const AvailableStores = ({ navigation }) => {
+    const [userName, setUserName] = useState('');
     const [stores, setStores] = useState([]);
 
     const checkIfStoreIsOpen = (store) => store.isOpen ? 'Open' : 'Closed';
 
     useEffect(() => {
+        const userID = auth.currentUser.uid;
+        const userRef = ref(db, 'users/' + userID);
+
+        onValue(userRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const userData = snapshot.val();
+                setUserName(userData.firstName + ' ' + userData.lastName);
+            } else {
+                setUserName('User Not Found'); 
+            }
+        });
         setStores(storesData.stores);
     }, []);
 
@@ -33,6 +47,7 @@ const AvailableStores = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.header}>Welcome, {userName}!</Text>
             <Text style={styles.sectionTitle}>Available Stores:</Text>
             <FlatList
                 data={stores}
@@ -48,6 +63,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 20,
+    },
+    header: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
     },
     sectionTitle: {
         fontSize: 20,
