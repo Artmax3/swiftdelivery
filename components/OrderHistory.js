@@ -142,6 +142,10 @@ const handleReorder = (orderId) => {
   console.log(`Order ${orderId} has been reordered as order ${newOrder.id}.`);
 };
 
+const Separator = () => (
+  <View style={styles.separator} />
+);
+
 const OrderHistoryScreen = () => {
   const [orders, setOrders] = useState(orderHistoryData);
   const [sortOption, setSortOption] = useState('date');
@@ -165,6 +169,7 @@ const OrderHistoryScreen = () => {
       <FlatList
         data={orders}
         keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={Separator}
         renderItem={({ item }) => (
           <View style={styles.orderContainer}>
             <Text style={styles.date}>{item.date}</Text>
@@ -251,6 +256,12 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  separator: {
+    height: 1,
+    width: "100%",
+    backgroundColor: "#444",
+    marginBottom: 20,
   },
 });
 
