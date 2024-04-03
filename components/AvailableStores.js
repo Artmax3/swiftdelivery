@@ -48,6 +48,9 @@ const AvailableStores = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.header}>Welcome, {userName}!</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('BusinessProfile')} style={styles.storeItem}>
+                <Text style={styles.storeName}>Business Profile</Text>
+            </TouchableOpacity>
             <Text style={styles.sectionTitle}>Available Stores:</Text>
             <FlatList
                 data={stores}

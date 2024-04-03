@@ -14,6 +14,7 @@ const UpdateProductInfoScreen = () => {
     setProductDescription('');
     setProductPrice('');
   };
+  
 
   return (
     <View style={styles.container}>

@@ -12,6 +12,8 @@ import Cart from './components/Cart.js';
 import SignUpScreen from './components/SignUpScreen.js'
 import SignInScreen from './components/SignInScreen.js'
 import Menu from './components/MenuScreen.js';
+import BusinessProfile from './components/BusinessProfile.js';
+import EditProductInfo from './components/EditProductInfo.js'
 
 
 const Stack = createStackNavigator();
@@ -30,9 +32,9 @@ const App = () => {
         <Stack.Screen name="Cart" component={Cart} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Screen name="BusinessProfile" component={BusinessProfile} />
 
-
-
+        <Stack.Screen name="EditProductInfo" component={EditProductInfo} />
       </Stack.Navigator>
     </NavigationContainer>
   );
