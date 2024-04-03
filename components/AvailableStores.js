@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, TextInput } from 'react-native';
 import storesData from '../data/restro.json';
 import { db, auth } from '../firebaseConfig';
 import { ref, onValue } from 'firebase/database';
@@ -7,8 +7,19 @@ import { ref, onValue } from 'firebase/database';
 const AvailableStores = ({ navigation }) => {
     const [userName, setUserName] = useState('');
     const [stores, setStores] = useState([]);
+    const [searchQuery, setSearchQuery] = useState(''); 
+    const [filteredStores, setFilteredStores] = useState([]); 
 
     const checkIfStoreIsOpen = (store) => store.isOpen ? 'Open' : 'Closed';
+
+    const handleSearch = (query) => { 
+        setSearchQuery(query);
+        if (query) {
+            setFilteredStores(stores.filter(store => store.name.toLowerCase().includes(query.toLowerCase())));
+        } else {
+            setFilteredStores(stores);
+        }
+    };
 
     useEffect(() => {
         const userID = auth.currentUser.uid;
@@ -23,6 +34,7 @@ const AvailableStores = ({ navigation }) => {
             }
         });
         setStores(storesData.stores);
+        setFilteredStores(storesData.stores); 
     }, []);
 
     const renderStoreItem = ({ item }) => (
@@ -54,6 +66,12 @@ const AvailableStores = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.header}>Welcome, {userName}!</Text>
+            <TextInput 
+                style={styles.searchBar}
+                value={searchQuery}
+                onChangeText={handleSearch}
+                placeholder="Search for dishes or restaurants"
+            />
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('OrderHistory')}>
                     <Text style={styles.businessProfileButton}>Order History</Text>
@@ -64,9 +82,9 @@ const AvailableStores = ({ navigation }) => {
             </View>
             <Text style={styles.sectionTitle}>Available Stores:</Text>
             <FlatList
-                data={stores}
+                data={filteredStores} 
                 renderItem={renderStoreItem}
-                keyExtractor={(item, index) => (item.id || index).toString()} // Provide a default value if id is undefined
+                keyExtractor={(item, index) => (item.id || index).toString()} 
                 contentContainerStyle={{ paddingBottom: 20 }}
             />
         </View>
@@ -118,6 +136,14 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+    searchBar: { 
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 8,
+        padding: 10,
+        marginBottom: 20,
     },
 });
 
