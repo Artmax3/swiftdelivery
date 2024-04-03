@@ -14,6 +14,8 @@ import SignInScreen from './components/SignInScreen.js'
 import Menu from './components/MenuScreen.js';
 import BusinessProfile from './components/BusinessProfile.js';
 import EditProductInfo from './components/EditProductInfo.js'
+import OrderHistory from './components/OrderHistory.js'
+import CustomerReviews from './components/CustomersReviews.js';
 
 
 const Stack = createStackNavigator();
@@ -33,8 +35,9 @@ const App = () => {
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
         <Stack.Screen name="BusinessProfile" component={BusinessProfile} />
-
         <Stack.Screen name="EditProductInfo" component={EditProductInfo} />
+        <Stack.Screen name="OrderHistory" component={OrderHistory} />
+        <Stack.Screen name="CustomerReviews" component={CustomerReviews} />
       </Stack.Navigator>
     </NavigationContainer>
   );

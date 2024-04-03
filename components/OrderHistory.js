@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
-import OrderItem from './OrderItem';
 
 const orderHistoryData = [
   {
@@ -20,7 +19,31 @@ const orderHistoryData = [
       { id: '3', name: 'Taco', quantity: 2, price: 3.99 },
     ],
   },
+  {
+    id: '3',
+    date: '2024-03-18',
+    total: 15.98,
+    items: [
+      { id: '4', name: 'Pizza', quantity: 1, price: 15.98 },
+    ],
+  },
+  {
+    id: '4',
+    date: '2024-03-17',
+    total: 20.00,
+    items: [
+      { id: '5', name: 'Salad', quantity: 2, price: 10.00 },
+    ],
+  },
 ];
+
+const OrderItem = ({ name, quantity, price }) => (
+  <View style={styles.orderItem}>
+    <Text style={styles.itemName}>{name}</Text>
+    <Text style={styles.itemQuantity}>Quantity: {quantity}</Text>
+    <Text style={styles.itemPrice}>Price: ${price.toFixed(2)}</Text>
+  </View>
+);
 
 const OrderHistoryScreen = () => {
   return (
@@ -73,6 +96,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
+  },
+  orderItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  itemName: {
+    fontSize: 16,
+  },
+  itemQuantity: {
+    fontSize: 16,
+  },
+  itemPrice: {
+    fontSize: 16,
   },
 });
 
