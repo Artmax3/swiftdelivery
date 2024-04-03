@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
 
 const orderHistoryData = [
@@ -54,17 +54,34 @@ const printReceipt = (orderId) => {
 };
 
 
-const cancelOrder = (orderId) => {
-  orderHistoryData = orderHistoryData.map(order => 
+
+const handleCancelOrder = (orderId) => {
+  orderHistoryData = orderHistoryData.map(order =>
     order.id === orderId ? { ...order, isAccepted: false } : order
   );
   console.log(`Order ${orderId} has been cancelled.`);
 };
 
 const OrderHistoryScreen = () => {
+  const [orders, setOrders] = useState(orderHistoryData);
+  const [sortOption, setSortOption] = useState('date');
+
+  const handleSortChange = (value) => {
+    setSortOption(value);
+    if (value === 'date') {
+      setOrders([...orders].sort((a, b) => new Date(b.date) - new Date(a.date)));
+    } else if (value === 'total') {
+      setOrders([...orders].sort((a, b) => b.total - a.total));
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Order History</Text>
+      <View style={styles.sortOptions}>
+        <Button title="Sort by Date" onPress={() => handleSortChange('date')} />
+        <Button title="Sort by Total" onPress={() => handleSortChange('total')} />
+      </View>
       <FlatList
         data={orderHistoryData}
         keyExtractor={(item) => item.id}
@@ -72,7 +89,7 @@ const OrderHistoryScreen = () => {
           <View style={styles.orderContainer}>
             <Text style={styles.date}>{item.date}</Text>
             <Text style={styles.total}>Total: ${item.total.toFixed(2)}</Text>
-            <Text style={[styles.acceptanceStatus, item.isAccepted ? {color: 'green'} : {color: 'red'}]}>
+            <Text style={[styles.acceptanceStatus, item.isAccepted ? { color: 'green' } : { color: 'red' }]}>
               {item.isAccepted ? 'Accepted' : 'Not Accepted'}
             </Text>
             <FlatList
@@ -136,6 +153,11 @@ const styles = StyleSheet.create({
   },
   itemPrice: {
     fontSize: 16,
+  },
+  sortOptions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
   },
 });
 
