@@ -53,6 +53,14 @@ const printReceipt = (orderId) => {
   console.log(`Printing receipt for order ${orderId}`);
 };
 
+
+const cancelOrder = (orderId) => {
+  orderHistoryData = orderHistoryData.map(order => 
+    order.id === orderId ? { ...order, isAccepted: false } : order
+  );
+  console.log(`Order ${orderId} has been cancelled.`);
+};
+
 const OrderHistoryScreen = () => {
   return (
     <View style={styles.container}>
@@ -79,6 +87,7 @@ const OrderHistoryScreen = () => {
               )}
             />
             <Button title="Print Receipt" onPress={() => printReceipt(item.id)} />
+            <Button title="Cancel Order" onPress={() => handleCancelOrder(item.id)} />
           </View>
         )}
       />
