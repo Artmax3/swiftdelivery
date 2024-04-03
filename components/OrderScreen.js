@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Button, TextInput } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Button, TextInput, Alert, TouchableOpacity } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const OrderScreen = ({ route, navigation }) => {
   const { orders } = route.params;
-
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [address, setAddress] = useState('');
   const [instructions, setInstructions] = useState('');
+  const [deliveryOption, setDeliveryOption] = useState('Drop-off');
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -33,7 +33,7 @@ const OrderScreen = ({ route, navigation }) => {
 
   const calculateTotalBill = () => {
     const subtotal = calculateSubtotal();
-    const tax = subtotal * 0.13; // Calculate tax amount
+    const tax = subtotal * 0.13; 
     const total = subtotal + tax;
     return total.toFixed(2);
   };
@@ -46,13 +46,19 @@ const OrderScreen = ({ route, navigation }) => {
   );
 
   const handleCheckout = () => {
+    if (!address.trim()) {
+      Alert.alert('Error', 'Please provide both delivery address.');
+      return;
+    }
+
     navigation.navigate('Checkout', {
       orders,
       subtotal: calculateSubtotal(),
       tax: calculateTotalBill() - calculateSubtotal(),
       scheduledDate: selectedDate,
       address,
-      instructions
+      instructions,
+      deliveryOption 
     });
   };
 
@@ -65,7 +71,6 @@ const OrderScreen = ({ route, navigation }) => {
           value={address}
           onChangeText={setAddress}
           multiline
-
         />
         <TextInput
           style={[styles.input, { height: 100 }]}
@@ -75,6 +80,29 @@ const OrderScreen = ({ route, navigation }) => {
           multiline
         />
       </View>
+
+      <View style={styles.deliveryOptionContainer}>
+        <Text style={styles.deliveryOptionTitle}>Delivery Option:</Text>
+        <View style={styles.optionsContainer}>
+          <TouchableOpacity
+            style={styles.optionButton}
+            onPress={() => setDeliveryOption('Drop-off')}
+          >
+            <Text style={deliveryOption === 'Drop-off' ? styles.optionSelected : styles.option}>
+              Drop-off at the door
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.optionButton}
+            onPress={() => setDeliveryOption('Hand it')}
+          >
+            <Text style={deliveryOption === 'Hand it' ? styles.optionSelected : styles.option}>
+              Hand it to me
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
       <Text style={styles.header}>Your Order</Text>
       <FlatList
         data={orders}
@@ -99,7 +127,6 @@ const OrderScreen = ({ route, navigation }) => {
         <Text>
           Scheduled for: {selectedDate ? selectedDate.toLocaleDateString() : 'Not scheduled'}
         </Text>
-
       </View>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
@@ -150,6 +177,30 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 20,
   },
+  deliveryOptionContainer: {
+    marginVertical: 20,
+  },
+  deliveryOptionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  optionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  optionButton: {
+    padding: 10,
+  },
+  option: {
+    fontSize: 14,
+  },
+  optionSelected: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
 });
 
 export default OrderScreen;
+
+
