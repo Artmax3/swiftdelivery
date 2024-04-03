@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
 
-const orderHistoryData = [
+let orderHistoryData = [
   {
     id: '1',
     date: '2024-03-20',
     total: 23.98,
     isAccepted: true,
+    progress: 'Preparing',
     items: [
       { id: '1', name: 'Burger', quantity: 1, price: 9.99 },
       { id: '2', name: 'Pasta', quantity: 1, price: 12.99 },
@@ -17,6 +18,7 @@ const orderHistoryData = [
     date: '2024-03-19',
     total: 12.98,
     isAccepted: false,
+    progress: 'Cancelled',
     items: [
       { id: '3', name: 'Taco', quantity: 2, price: 3.99 },
     ],
@@ -26,6 +28,7 @@ const orderHistoryData = [
     date: '2024-03-18',
     total: 15.98,
     isAccepted: true,
+    progress: 'Delivered',
     items: [
       { id: '4', name: 'Pizza', quantity: 1, price: 15.98 },
     ],
@@ -33,10 +36,71 @@ const orderHistoryData = [
   {
     id: '4',
     date: '2024-03-17',
-    total: 20.00,
-    isAccepted: false,
+    total: 20.98,
+    isAccepted: true,
+    progress: 'Delivered',
     items: [
-      { id: '5', name: 'Salad', quantity: 2, price: 10.00 },
+      { id: '5', name: 'Salad', quantity: 2, price: 10.49 },
+    ],
+  },
+  {
+    id: '5',
+    date: '2024-03-16',
+    total: 10.99,
+    isAccepted: true,
+    progress: 'Delivered',
+    items: [
+      { id: '6', name: 'Soup', quantity: 1, price: 10.99 },
+    ],
+  },
+  {
+    id: '6',
+    date: '2024-03-15',
+    total: 30.98,
+    isAccepted: true,
+    progress: 'Preparing',
+    items: [
+      { id: '7', name: 'Steak', quantity: 1, price: 30.98 },
+    ],
+  },
+  {
+    id: '7',
+    date: '2024-03-14',
+    total: 8.99,
+    isAccepted: false,
+    progress: 'Cancelled',
+    items: [
+      { id: '8', name: 'Ice Cream', quantity: 1, price: 8.99 },
+    ],
+  },
+  {
+    id: '8',
+    date: '2024-03-13',
+    total: 14.99,
+    isAccepted: true,
+    progress: 'Delivered',
+    items: [
+      { id: '9', name: 'Sandwich', quantity: 1, price: 14.99 },
+    ],
+  },
+  {
+    id: '9',
+    date: '2024-03-12',
+    total: 12.99,
+    isAccepted: true,
+    progress: 'Delivered',
+    items: [
+      { id: '10', name: 'Chicken', quantity: 1, price: 12.99 },
+    ],
+  },
+  {
+    id: '10',
+    date: '2024-03-11',
+    total: 16.99,
+    isAccepted: true,
+    progress: 'Delivered',
+    items: [
+      { id: '11', name: 'Fish', quantity: 1, price: 16.99 },
     ],
   },
 ];
@@ -53,13 +117,29 @@ const printReceipt = (orderId) => {
   console.log(`Printing receipt for order ${orderId}`);
 };
 
-
-
 const handleCancelOrder = (orderId) => {
   orderHistoryData = orderHistoryData.map(order =>
-    order.id === orderId ? { ...order, isAccepted: false } : order
+    order.id === orderId ? { ...order, isAccepted: false, progress: 'Cancelled' } : order
   );
   console.log(`Order ${orderId} has been cancelled.`);
+};
+
+const handleReorder = (orderId) => {
+  const orderToReorder = orderHistoryData.find(order => order.id === orderId);
+  if (!orderToReorder) {
+    console.log(`Order ${orderId} not found.`);
+    return;
+  }
+
+  const newOrder = {
+    ...orderToReorder,
+    id: Math.max(...orderHistoryData.map(order => Number(order.id))) + 1 + '', // generate a new id
+    date: new Date().toISOString().split('T')[0], // set the current date
+    progress: 'Preparing',
+  };
+
+  orderHistoryData = [newOrder, ...orderHistoryData];
+  console.log(`Order ${orderId} has been reordered as order ${newOrder.id}.`);
 };
 
 const OrderHistoryScreen = () => {
@@ -83,12 +163,13 @@ const OrderHistoryScreen = () => {
         <Button title="Sort by Total" onPress={() => handleSortChange('total')} />
       </View>
       <FlatList
-        data={orderHistoryData}
+        data={orders}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.orderContainer}>
             <Text style={styles.date}>{item.date}</Text>
             <Text style={styles.total}>Total: ${item.total.toFixed(2)}</Text>
+            <Text style={styles.progress}>Progress: {item.progress}</Text>
             <Text style={[styles.acceptanceStatus, item.isAccepted ? { color: 'green' } : { color: 'red' }]}>
               {item.isAccepted ? 'Accepted' : 'Not Accepted'}
             </Text>
@@ -103,8 +184,11 @@ const OrderHistoryScreen = () => {
                 />
               )}
             />
-            <Button title="Print Receipt" onPress={() => printReceipt(item.id)} />
-            <Button title="Cancel Order" onPress={() => handleCancelOrder(item.id)} />
+            <View style={styles.buttonContainer}>
+              <Button title="Print Receipt" onPress={() => printReceipt(item.id)} />
+              <Button title="Cancel Order" onPress={() => handleCancelOrder(item.id)} />
+              <Button title="Reorder" onPress={() => handleReorder(item.id)} />
+            </View>
           </View>
         )}
       />
@@ -135,6 +219,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+  progress: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
   acceptanceStatus: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -158,6 +247,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
