@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, Button, Alert, StyleSheet, TextInput, ScrollView } from 'react-native';
 import { useStripe, CardField, useConfirmPayment } from '@stripe/stripe-react-native';
 
-const CheckoutScreen = ({ navigation }) => {
+const CheckoutScreen = ({ route, navigation }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [cardDetails, setCardDetails] = useState();
   const { confirmPayment } = useConfirmPayment();
 
+  // Extract order details from route parameters
+  const { orders, subtotal, tax, scheduledDate, address, instructions } = route.params;
+
   const initializePaymentSheet = async () => {
-    // Fetch PaymentIntent and other details from your backend
+    // Fetch PaymentIntent and other details from database
     const { paymentIntent, ephemeralKey, customer } = await fetchPaymentSheetParams();
 
     // Initialize the payment sheet
@@ -31,8 +34,6 @@ const CheckoutScreen = ({ navigation }) => {
       return;
     }
 
-    // Normally you would send cardDetails to your server here to handle payment
-    // For demonstration, we'll simulate successful save
     Alert.alert("Success", "Payment information saved successfully");
   };
 
@@ -52,9 +53,17 @@ const CheckoutScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Checkout</Text>
-      <Text>Your order details will be displayed here.</Text>
+      <Text style={styles.subtitle}>Order Details:</Text>
+      <View style={styles.orderDetails}>
+        <Text>Subtotal: ${subtotal.toFixed(2)}</Text>
+        <Text>Tax: ${tax.toFixed(2)}</Text>
+        <Text>Total: ${(subtotal + tax).toFixed(2)}</Text>
+        {scheduledDate && <Text>Scheduled for: {scheduledDate.toLocaleDateString()} {scheduledDate.toLocaleTimeString()}</Text>}
+      </View>
+      <Text style={styles.subtitle}>Delivery Address: {address}</Text>
+      <Text style={styles.subtitle}>Delivery Instructions: {instructions} </Text>
       <CardField
         postalCodeEnabled={true}
         placeholder={{
@@ -68,21 +77,38 @@ const CheckoutScreen = ({ navigation }) => {
       />
       <Button title="Save My Payment Information" onPress={handleSavePaymentInfo} />
       <Button title="Confirm Order" onPress={handleConfirmOrder} />
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  subtitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  orderDetails: {
+    marginBottom: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  textArea: {
+    height: 100,
+    textAlignVertical: 'top',
   },
   card: {
     backgroundColor: '#FFFFFF',
