@@ -6,6 +6,7 @@ const orderHistoryData = [
     id: '1',
     date: '2024-03-20',
     total: 23.98,
+    isAccepted: true,
     items: [
       { id: '1', name: 'Burger', quantity: 1, price: 9.99 },
       { id: '2', name: 'Pasta', quantity: 1, price: 12.99 },
@@ -15,6 +16,7 @@ const orderHistoryData = [
     id: '2',
     date: '2024-03-19',
     total: 12.98,
+    isAccepted: false,
     items: [
       { id: '3', name: 'Taco', quantity: 2, price: 3.99 },
     ],
@@ -23,6 +25,7 @@ const orderHistoryData = [
     id: '3',
     date: '2024-03-18',
     total: 15.98,
+    isAccepted: true,
     items: [
       { id: '4', name: 'Pizza', quantity: 1, price: 15.98 },
     ],
@@ -31,6 +34,7 @@ const orderHistoryData = [
     id: '4',
     date: '2024-03-17',
     total: 20.00,
+    isAccepted: false,
     items: [
       { id: '5', name: 'Salad', quantity: 2, price: 10.00 },
     ],
@@ -56,6 +60,9 @@ const OrderHistoryScreen = () => {
           <View style={styles.orderContainer}>
             <Text style={styles.date}>{item.date}</Text>
             <Text style={styles.total}>Total: ${item.total.toFixed(2)}</Text>
+            <Text style={[styles.acceptanceStatus, item.isAccepted ? {color: 'green'} : {color: 'red'}]}>
+              {item.isAccepted ? 'Accepted' : 'Not Accepted'}
+            </Text>
             <FlatList
               data={item.items}
               keyExtractor={(orderItem) => orderItem.id}
@@ -96,6 +103,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
+  },
+  acceptanceStatus: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'green',
   },
   orderItem: {
     flexDirection: 'row',
