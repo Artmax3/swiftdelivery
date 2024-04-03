@@ -8,31 +8,41 @@ const AvailableStores = ({ navigation }) => {
     const [userName, setUserName] = useState('');
     const [stores, setStores] = useState([]);
 
+    const checkIfStoreIsOpen = (store) => store.isOpen ? 'Open' : 'Closed';
+
     useEffect(() => {
-        // Fetch the user's name from the Realtime Database based on the logged-in user's UID
-        // Assuming this part remains unchanged
         const userID = auth.currentUser.uid;
         const userRef = ref(db, 'users/' + userID);
 
-        // Listen for changes in the user's data
         onValue(userRef, (snapshot) => {
             if (snapshot.exists()) {
                 const userData = snapshot.val();
                 setUserName(userData.firstName + ' ' + userData.lastName);
             } else {
-                setUserName('User Not Found'); // Handle the case where user data is not found
+                setUserName('User Not Found'); 
             }
         });
-
-        // Set the stores from the imported JSON data
         setStores(storesData.stores);
     }, []);
 
     const renderStoreItem = ({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('Menu', { store: item })} style={styles.storeItem}>
-            <Text style={styles.storeName}>{item.name}</Text>
-            <Text style={styles.storeLocation}>{item.location}</Text>
-        </TouchableOpacity>
+        <View>
+            {item.isOpen ? (
+                <TouchableOpacity onPress={() => navigation.navigate('Menu', { store: item })} style={styles.storeItem}>
+                    <Text style={styles.storeName}>{item.name}</Text>
+                    <Text style={styles.storeLocation}>{item.location}</Text>
+                    <Text style={[styles.storeStatus, { color: item.isOpen ? 'green' : 'red' }]}>
+                        {checkIfStoreIsOpen(item)}
+                    </Text>
+                </TouchableOpacity>
+            ) : (
+                <View style={[styles.storeItem, { backgroundColor: '#eee' }]}>
+                    <Text style={styles.storeName}>{item.name}</Text>
+                    <Text style={styles.storeLocation}>{item.location}</Text>
+                    <Text style={[styles.storeStatus, { color: 'red' }]}>Closed</Text>
+                </View>
+            )}
+        </View>
     );
 
     return (
@@ -52,8 +62,6 @@ const AvailableStores = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         paddingHorizontal: 20,
     },
     header: {
@@ -72,7 +80,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 15,
         marginBottom: 10,
-        width: '100%',
     },
     storeName: {
         fontSize: 18,
@@ -81,6 +88,11 @@ const styles = StyleSheet.create({
     },
     storeLocation: {
         fontSize: 16,
+    },
+    storeStatus: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginTop: 5,
     },
 });
 

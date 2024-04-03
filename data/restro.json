@@ -1,119 +1,468 @@
 {
-    "stores": [
-      {
-        "name": "Delicious Delights",
-        "location": "123 Dundas Street, London, Canada",
-        "menu": [
-          {
-            "category": "Appetizers",
-            "items": [
-              {
-                "name": "Garlic Bread",
-                "price": 5.99
-              },
-              {
-                "name": "Bruschetta",
-                "price": 7.99
-              },
-              {
-                "name": "Caprese Salad",
-                "price": 8.99
-              }
-            ]
-          },
-          {
-            "category": "Main Courses",
-            "items": [
-              {
-                "name": "Spaghetti Carbonara",
-                "price": 12.99
-              },
-              {
-                "name": "Margherita Pizza",
-                "price": 10.99
-              },
-              {
-                "name": "Grilled Salmon",
-                "price": 15.99
-              }
-            ]
-          },
-          {
-            "category": "Desserts",
-            "items": [
-              {
-                "name": "Tiramisu",
-                "price": 6.99
-              },
-              {
-                "name": "Cheesecake",
-                "price": 7.99
-              },
-              {
-                "name": "Chocolate Fondant",
-                "price": 8.99
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "Tasty Treats",
-        "location": "456 Tecumseh Avenue, London, Canada",
-        "menu": [
-          {
-            "category": "Appetizers",
-            "items": [
-              {
-                "name": "Mozzarella Sticks",
-                "price": 6.99
-              },
-              {
-                "name": "Chicken Wings",
-                "price": 8.99
-              },
-              {
-                "name": "Nachos",
-                "price": 9.99
-              }
-            ]
-          },
-          {
-            "category": "Main Courses",
-            "items": [
-              {
-                "name": "Steak",
-                "price": 19.99
-              },
-              {
-                "name": "Burger",
-                "price": 12.99
-              },
-              {
-                "name": "Pasta Primavera",
-                "price": 14.99
-              }
-            ]
-          },
-          {
-            "category": "Desserts",
-            "items": [
-              {
-                "name": "Ice Cream Sundae",
-                "price": 5.99
-              },
-              {
-                "name": "Apple Pie",
-                "price": 6.99
-              },
-              {
-                "name": "Brownie",
-                "price": 4.99
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
-  
+  "stores": [
+    {
+      "name": "Delicious Delights",
+      "location": "123 Dundas Street, London, Canada",
+      "isOpen": false,
+      "menu": [
+        {
+          "category": "Appetizers",
+          "items": [
+            {
+              "name": "Garlic Bread",
+              "price": 5.99
+            },
+            {
+              "name": "Bruschetta",
+              "price": 7.99
+            },
+            {
+              "name": "Caprese Salad",
+              "price": 8.99
+            }
+          ]
+        },
+        {
+          "category": "Main Courses",
+          "items": [
+            {
+              "name": "Spaghetti Carbonara",
+              "price": 12.99
+            },
+            {
+              "name": "Margherita Pizza",
+              "price": 10.99
+            },
+            {
+              "name": "Grilled Salmon",
+              "price": 15.99
+            }
+          ]
+        },
+        {
+          "category": "Desserts",
+          "items": [
+            {
+              "name": "Tiramisu",
+              "price": 6.99
+            },
+            {
+              "name": "Cheesecake",
+              "price": 7.99
+            },
+            {
+              "name": "Chocolate Fondant",
+              "price": 8.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tasty Treats",
+      "location": "456 Tecumseh Avenue, London, Canada",
+      "isOpen": true,
+      "menu": [
+        {
+          "category": "Appetizers",
+          "items": [
+            {
+              "name": "Mozzarella Sticks",
+              "price": 6.99
+            },
+            {
+              "name": "Chicken Wings",
+              "price": 8.99
+            },
+            {
+              "name": "Nachos",
+              "price": 9.99
+            }
+          ]
+        },
+        {
+          "category": "Main Courses",
+          "items": [
+            {
+              "name": "Steak",
+              "price": 19.99
+            },
+            {
+              "name": "Burger",
+              "price": 12.99
+            },
+            {
+              "name": "Pasta Primavera",
+              "price": 14.99
+            }
+          ]
+        },
+        {
+          "category": "Desserts",
+          "items": [
+            {
+              "name": "Ice Cream Sundae",
+              "price": 5.99
+            },
+            {
+              "name": "Apple Pie",
+              "price": 6.99
+            },
+            {
+              "name": "Brownie",
+              "price": 4.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Hakka Khazana",
+      "location": "428 Clarence St, London, Canada",
+      "isOpen": true,
+      "menu": [
+        {
+          "category": "Appetizers",
+          "items": [
+            {
+              "name": "Chicken Chilli",
+              "price": 12.99
+            },
+            {
+              "name": "Chaat Papri",
+              "price": 8.99
+            },
+            {
+              "name": "Samosa",
+              "price": 9.99
+            }
+          ]
+        },
+        {
+          "category": "Main Courses",
+          "items": [
+            {
+              "name": "Biryani",
+              "price": 19.99
+            },
+            {
+              "name": "(Momo) Dumpling",
+              "price": 12.99
+            },
+            {
+              "name": "Curry",
+              "price": 14.99
+            }
+          ]
+        },
+        {
+          "category": "Desserts",
+          "items": [
+            {
+              "name": "Rasmalai",
+              "price": 3.99
+            },
+            {
+              "name": "Rasbari",
+              "price": 2.99
+            },
+            {
+              "name": "Mango Lassi",
+              "price": 4.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Rambo's Kitchen",
+      "location": "134 Commissioners Rd, London, Canada",
+      "isOpen": true,
+      "menu": [
+        {
+          "category": "Appetizers",
+          "items": [
+            {
+              "name": "Chicken 365",
+              "price": 14.99
+            },
+            {
+              "name": "Chicken Boti Roll",
+              "price": 8.99
+            },
+            {
+              "name": "Pakoray",
+              "price": 9.99
+            }
+          ]
+        },
+        {
+          "category": "Main Courses",
+          "items": [
+            {
+              "name": "Chicken Biryani",
+              "price": 19.99
+            },
+            {
+              "name": "Mutton Biryani",
+              "price": 15.99
+            },
+            {
+              "name": "Zeera Rice",
+              "price": 6.99
+            }
+          ]
+        },
+        {
+          "category": "Sides",
+          "items": [
+            {
+              "name": "Green Raits",
+              "price": 2.99
+            },
+            {
+              "name": "Mixed Salad",
+              "price": 2.99
+            },
+            {
+              "name": "Green Chutni",
+              "price": 4.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "BTRMLK",
+      "location": "275 Wharncliff Rd N, London, Canada",
+      "isOpen": false,
+      "menu": [
+        {
+          "category": "Appetizers",
+          "items": [
+            {
+              "name": "Strips",
+              "price": 13.99
+            },
+            {
+              "name": "Honey Popper",
+              "price": 16.85
+            },
+            {
+              "name": "Buffalo Mac",
+              "price": 14.99
+            }
+          ]
+        },
+        {
+          "category": "Main Courses",
+          "items": [
+            {
+              "name": "Classic Mac",
+              "price": 6.99
+            },
+            {
+              "name": "Sandwich",
+              "price": 7.99
+            },
+            {
+              "name": "Poutine",
+              "price": 6.99
+            }
+          ]
+        },
+        {
+          "category": "Drinks &Desserts",
+          "items": [
+            {
+              "name": "Soft Drink",
+              "price": 2.99
+            },
+            {
+              "name": "Banana Pudding",
+              "price": 6.99
+            },
+            {
+              "name": "Brownie",
+              "price": 4.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Biryani Bar",
+      "location": "1775 Ernest Avenue, London, Canada",
+      "isOpen": true,
+      "menu": [
+        {
+          "category": "Appetizers",
+          "items": [
+            {
+              "name": "Hakka Noodles",
+              "price": 14.99
+            },
+            {
+              "name": "Bhel Puri",
+              "price": 8.99
+            },
+            {
+              "name": "Spring Roll",
+              "price": 7.99
+            }
+          ]
+        },
+        {
+          "category": "Main Courses",
+          "items": [
+            {
+              "name": "Dum Biryani",
+              "price": 14.99
+            },
+            {
+              "name": "Fish Fry Biryani",
+              "price": 16.49
+            },
+            {
+              "name": "Paneer Tikka Masala",
+              "price": 15.99
+            }
+          ]
+        },
+        {
+          "category": "Desserts",
+          "items": [
+            {
+              "name": "Gajar Haluwa",
+              "price": 5.99
+            },
+            {
+              "name": "Gulab Jamun",
+              "price": 4.99
+            },
+            {
+              "name": "Moong Dal Haluwa",
+              "price": 5.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "India House Fine Indian",
+      "location": "756 Wellington Rd, London, Canada",
+      "isOpen": true,
+      "menu": [
+        {
+          "category": "Appetizers",
+          "items": [
+            {
+              "name": "Chicken Samosa",
+              "price": 6.99
+            },
+            {
+              "name": "Aloo Bhaji",
+              "price": 7.0
+            },
+            {
+              "name": "Hara Kabab",
+              "price": 8.00
+            }
+          ]
+        },
+        {
+          "category": "Main Courses",
+          "items": [
+            {
+              "name": "Chicken Tikka Masala",
+              "price": 15.99
+            },
+            {
+              "name": "Chicken Lababdar",
+              "price": 16.00
+            },
+            {
+              "name": "Butter Chichken",
+              "price": 14.99
+            }
+          ]
+        },
+        {
+          "category": "Desserts",
+          "items": [
+            {
+              "name": "Kheer",
+              "price": 5.99
+            },
+            {
+              "name": "Kulfi",
+              "price": 4.25
+            },
+            {
+              "name": "Rasamalai",
+              "price": 4.99
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KFC",
+      "location": "1011 Wellington Rd, London, Canada",
+      "isOpen": true,
+      "menu": [
+        {
+          "category": "Appetizers",
+          "items": [
+            {
+              "name": "Popcorn Chicken",
+              "price": 5.89
+            },
+            {
+              "name": "1 Tender",
+              "price": 5.89
+            },
+            {
+              "name": "Slider",
+              "price": 5.89
+            }
+          ]
+        },
+        {
+          "category": "Main Courses",
+          "items": [
+            {
+              "name": "Big Crunch Sandwich",
+              "price": 19.99
+            },
+            {
+              "name": "Onion Ring Sandwich Combo",
+              "price": 15.99
+            },
+            {
+              "name": "Original Chicken Bucket",
+              "price": 35.99
+            }
+          ]
+        },
+        {
+          "category": "Desserts",
+          "items": [
+            {
+              "name": "Ice Cream Sundae",
+              "price": 5.99
+            },
+            {
+              "name": "Apple Pie",
+              "price": 6.99
+            },
+            {
+              "name": "Brownie",
+              "price": 4.99
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
