@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, Alert, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useStripe, CardField, useConfirmPayment } from '@stripe/stripe-react-native';
+import * as Notifications from 'expo-notifications';
+import { auth, db } from '../firebaseConfig';
+import { ref, push, remove } from 'firebase/database';
 
 const CheckoutScreen = ({ route, navigation }) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [cardDetails, setCardDetails] = useState();
-  const { confirmPayment } = useConfirmPayment();
-
   const { orders, subtotal, tax, scheduledDate, address, instructions, deliveryOption } = route.params;
 
   const [estimatedTime, setEstimatedTime] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('card'); 
+  const [paymentMethod, setPaymentMethod] = useState('card');
 
   useEffect(() => {
+    askForNotificationPermission();
     if (!scheduledDate) {
       const currentTime = new Date();
       const deliveryTime = new Date();
@@ -20,6 +22,29 @@ const CheckoutScreen = ({ route, navigation }) => {
       setEstimatedTime(deliveryTime.toLocaleTimeString());
     }
   }, [scheduledDate]);
+
+  const askForNotificationPermission = async () => {
+    const { status } = await Notifications.getPermissionsAsync();
+    if (status !== 'granted') {
+      const { status: newStatus } = await Notifications.requestPermissionsAsync();
+      if (newStatus !== 'granted') {
+        Alert.alert('Permission not granted', 'You need to enable push notifications to use this feature.');
+      }
+    }
+  };
+
+  const sendNotification = async () => {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: 'Order Confirmed',
+        body: 'Your order has been confirmed. Thank you for shopping with us!',
+        ios: { sound: true },
+        android: { sound: true, vibrate: true },
+      },
+      trigger: null,
+    });
+  };
+
 
   const initializePaymentSheet = async () => {
     const { paymentIntent, ephemeralKey, customer } = await fetchPaymentSheetParams();
@@ -58,11 +83,40 @@ const CheckoutScreen = ({ route, navigation }) => {
     if (paymentMethod === 'card') {
       await initializePaymentSheet();
     } else {
-      // Max, can you handle cash on delivery logic to save the order details to the user's database without payment processing lol
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          const userOrderHistoryRef = ref(db, `users/${user.uid}/order_history`);
+          await push(userOrderHistoryRef, {
+            orders: orders,
+            subtotal: subtotal,
+            tax: tax.toFixed(2),
+            total: subtotal + tax,
+            scheduledDate: scheduledDate ? scheduledDate.toISOString() : new Date().toISOString(),
+            address: address,
+            instructions: instructions,
+            deliveryOption: deliveryOption,
+            paymentMethod: paymentMethod,
+            createdAt: new Date().toISOString(),
+          });
+
+          // Remove cart items from the database
+          const userCartRef = ref(db, `users/${user.uid}/cartItems`);
+          await remove(userCartRef);
+
+          Alert.alert("Order received!", "Your order has been placed successfully.");
+          sendNotification();
+          navigation.navigate('Restaurant');
+        } else {
+          Alert.alert("Error", "You must be logged in to place an order.");
+        }
+      } catch (error) {
+        console.error("Order Error:", error);
+        Alert.alert("Order Error", "There was a problem placing your order.");
+      }
     }
-    Alert.alert("Order received!");
-    navigation.navigate('Home');
   };
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -117,22 +171,31 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
+    backgroundColor: '#000501',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: 'white'
   },
   subtitle: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: 'white'
   },
   orderDetails: {
     marginBottom: 20,
+    backgroundColor: '#ffffff',
+    padding: 5,
+    borderRadius: 5
   },
   orderItem: {
     marginBottom: 10,
+    backgroundColor: '#ffffff',
+    padding: 5,
+    borderRadius: 5
   },
   input: {
     borderWidth: 1,

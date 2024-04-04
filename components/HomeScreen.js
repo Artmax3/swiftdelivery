@@ -5,13 +5,16 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>SwiftDelivery</Text>
-      <Image
-        source={require('./logo.png')}
-        style={styles.logo}
-      />
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('./logo.png')}
+          style={styles.logo}
+        />
+      </View>
       <Text style={styles.subtitle}>Let's Get Started</Text>
       <Button
         title="Continue →"
+        color="white"
         onPress={() => navigation.navigate('Auth')}
       />
     </View>
@@ -25,23 +28,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 50,
     paddingBottom: 20,
+    backgroundColor: '#000501',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#D5D8E1',
+  },
+  logoContainer: {
+    backgroundColor: '#D5D8E1',
+    padding: 10,
+    borderRadius: 15,
+    marginBottom: 10,
   },
   logo: {
     width: 250,
     height: 250,
     resizeMode: 'contain',
-    marginBottom: 10,
   },
   subtitle: {
     fontSize: 18,
-  },
-  button: {
-    marginBottom: 40,
+    color: '#D5D8E1',
   },
 });
+
+
 
 export default HomeScreen;

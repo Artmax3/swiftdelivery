@@ -59,79 +59,90 @@ export default function App() {
     }
 
     return (
-        <View style={styles.form}>
-            <View>
+        <View style={styles.background}>
+            <View style={styles.form}>
                 <View>
-                    <Text style={styles.header}>Sign Up</Text>
-                    <TextInput
-                        style={styles.textInput}
-                        onChangeText={(value) => setRegistrationFirstName(value)}
-                        name='firstName'
-                        placeholder="First Name"
-                    />
-                    <TextInput
-                        style={styles.textInput}
-                        onChangeText={(value) => setRegistrationLastName(value)}
-                        name='lastName'
-                        placeholder="Last Name"
-                    />
-                    <TextInput
-                        style={styles.textInput}
-                        onChangeText={(value) => setRegistrationEmail(value)}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        autoCompleteType="email"
-                        keyboardType="email-address"
-                        placeholder="Enter your email"
-                    />
-                    <TextInput
-                        style={styles.textInput}
-                        onChangeText={(value) => setRegistrationPassword(value)}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        autoCompleteType="password"
-                        keyboardType="visible-password"
-                        placeholder="Enter a password"
-                        secureTextEntry={true}
-                    />
-                    <View style={styles.buttonContainer}>
-                        <Button style={styles.button} title="Register" color="black" onPress={registerWithFirebase} />
-                        <Button style={styles.button} color="red" title="Cancel" onPress={() => navigation.navigate('Home')} />
+                    <View>
+                        <Text style={styles.header}>Sign Up</Text>
+                        <TextInput
+                            style={styles.textInput}
+                            onChangeText={(value) => setRegistrationFirstName(value)}
+                            name='firstName'
+                            placeholder="First Name"
+                        />
+                        <TextInput
+                            style={styles.textInput}
+                            onChangeText={(value) => setRegistrationLastName(value)}
+                            name='lastName'
+                            placeholder="Last Name"
+                        />
+                        <TextInput
+                            style={styles.textInput}
+                            onChangeText={(value) => setRegistrationEmail(value)}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            autoCompleteType="email"
+                            keyboardType="email-address"
+                            placeholder="Enter your email"
+                        />
+                        <TextInput
+                            style={styles.textInput}
+                            onChangeText={(value) => setRegistrationPassword(value)}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            autoCompleteType="password"
+                            keyboardType="visible-password"
+                            placeholder="Enter a password"
+                            secureTextEntry={true}
+                        />
+                        <View style={styles.buttonContainer}>
+                            <Button style={styles.button} title="Register" color="#D5D8E1" onPress={registerWithFirebase} />
+                            <Button style={styles.button} color="red" title="Cancel" onPress={() => navigation.navigate('Home')} />
+                        </View>
                     </View>
                 </View>
-            </View>
-        </View >
+            </View >
+        </View>
     );
 }
 const styles = StyleSheet.create({
-    form: {
+    background: {
         flex: 1,
-        margin: 30,
-        marginTop: 60,
+        backgroundColor: '#000501',
+    },
+    form: {
+      flex: 1,
+      margin: 30,
+      marginTop: 60,
+      backgroundColor: '#000501',
     },
     header: {
-        fontSize: 30,
-        textAlign: 'center',
-        paddingBottom: 50,
+      fontSize: 30,
+      textAlign: 'center',
+      paddingBottom: 50,
+      color: '#D5D8E1',
     },
     textInput: {
-        borderColor: '#ccc',
-        borderWidth: 1,
-        marginBottom: 15,
-        paddingVertical: 4,
-        paddingHorizontal: 2,
-        textAlignVertical: 'top'
+      borderColor: '#ccc',
+      borderWidth: 1,
+      marginBottom: 15,
+      paddingVertical: 4,
+      paddingHorizontal: 2,
+      textAlignVertical: 'top',
+      backgroundColor: '#D5D8E1',
+      color: '#000501',
     },
     buttonContainer: {
-        paddingVertical: 40,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
+      paddingVertical: 40,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
     },
     button: {
-        width: '40%',
+      width: '40%',
     },
     signOutButton: {
-        paddingVertical: 40
-    }
-});
+      paddingVertical: 40,
+    },
+  });
+  

@@ -32,11 +32,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#000501',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: 'white',
+    textAlign: 'center'
   },
   reviewContainer: {
     marginBottom: 20,
@@ -44,6 +47,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     padding: 10,
     borderRadius: 5,
+    backgroundColor: "#D5D8E1",
   },
   username: {
     fontWeight: 'bold',
@@ -51,8 +55,8 @@ const styles = StyleSheet.create({
   },
   rating: {
     marginBottom: 5,
+    color: 'blue'
   },
-  comment: {},
 });
 
 export default CustomerReviewsScreen;
