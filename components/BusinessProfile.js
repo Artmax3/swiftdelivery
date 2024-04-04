@@ -31,18 +31,21 @@ const ManageBusinessProfileScreen = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Business Name"
+        placeholderTextColor="white"
         value={businessName}
         onChangeText={setBusinessName}
       />
       <TextInput
         style={styles.input}
         placeholder="Business Address"
+        placeholderTextColor="white"
         value={businessAddress}
         onChangeText={setBusinessAddress}
       />
       <TextInput
         style={styles.input}
         placeholder="Business Phone Number"
+        placeholderTextColor="white"
         value={businessPhoneNumber}
         onChangeText={setBusinessPhoneNumber}
         keyboardType="phone-pad"
@@ -50,6 +53,7 @@ const ManageBusinessProfileScreen = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Business Description"
+        placeholderTextColor="white"
         value={businessDescription}
         onChangeText={setBusinessDescription}
         multiline
@@ -57,6 +61,7 @@ const ManageBusinessProfileScreen = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Product Name"
+        placeholderTextColor="white"
         value={productName}
         onChangeText={setProductName}
       />
@@ -74,11 +79,11 @@ const ManageBusinessProfileScreen = ({ navigation }) => {
             <Text style={styles.productName}>{product.name}</Text>
             <Text style={styles.productPrice}>{product.price}</Text>
             <Text style={styles.productDescription}>{product.description}</Text>
-            <Button title="Edit" onPress={() => editProductInfo(product.id)} />
+            <Button title="Edit" color="white" onPress={() => editProductInfo(product.id)} />
           </View>
         ))}
       </ScrollView>
-      <Button title="Save Profile" onPress={handleSaveProfile} />
+      <Button color="white" title="Save Profile" onPress={handleSaveProfile} />
     </View>
   );
 };
@@ -87,28 +92,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#000501',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
+    color: 'white'
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'white',
+    borderRadius: 5,
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
+    backgroundColor: "#d5d8e1",
+    color: 'black'
   },
   productName: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: 'white'
   },
   productPrice: {
     fontSize: 16,
+    color: 'white'
   },
   productDescription: {
     fontSize: 14,
+    color: 'white'
   },
 });
 

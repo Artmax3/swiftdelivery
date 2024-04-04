@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, Button, Alert, StyleSheet } from 'react-native';
+import { View, TextInput, Text, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { auth } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -7,6 +7,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 export default function App() {
     const [loginEmail, setLoginEmail] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const navigation = useNavigation();
 
     const loginWithFirebase = () => {
@@ -16,61 +17,75 @@ export default function App() {
         }
 
         signInWithEmailAndPassword(auth, loginEmail, loginPassword)
-            .then((userCredential) => {
-                const user = userCredential.user;
+            .then(() => {
                 Alert.alert('User logged in!');
                 navigation.navigate("Restaurant");
             })
             .catch((error) => {
                 const errorCode = error.code;
-                const errorMessage = error.message;
-
                 if (errorCode === 'auth/wrong-password') {
                     Alert.alert('Wrong password.');
                 } else {
-                    Alert.alert(errorMessage);
+                    Alert.alert(error.message);
                 }
             });
     };
 
     return (
-        <View style={styles.form}>
-            <Text style={styles.header}>Sign In</Text>
-            <TextInput
-                style={styles.textInput}
-                onChangeText={(value) => setLoginEmail(value)}
-                autoCapitalize="none"
-                autoCompleteType="email"
-                keyboardType="email-address"
-                placeholder="Enter your email"
-            />
-            <TextInput
-                style={styles.textInput}
-                onChangeText={(value) => setLoginPassword(value)}
-                autoCapitalize="none"
-                autoCompleteType="password"
-                keyboardType="default"
-                placeholder="Enter your password"
-                secureTextEntry={true}
-            />
-            <View style={styles.buttonContainer}>
-                <Button style={styles.button} title="Sign Up with Us" color='blue' onPress={() => navigation.navigate('SignUp')} />
-                <Button style={styles.button} title="Login" color='black' onPress={loginWithFirebase} />
+        <View style={styles.background}>
+            <View style={styles.form}>
+                <Text style={styles.header}>Sign In</Text>
+                <TextInput
+                    style={styles.textInput}
+                    onChangeText={setLoginEmail}
+                    autoCapitalize="none"
+                    autoComplete="email"
+                    keyboardType="email-address"
+                    placeholder="Enter your email"
+                />
+                <View>
+                    <TextInput
+                        style={styles.textInput}
+                        onChangeText={setLoginPassword}
+                        autoCapitalize="none"
+                        autoComplete="password"
+                        keyboardType="default"
+                        placeholder="Enter your password"
+                        secureTextEntry={!passwordVisible}
+                    />
+                    <TouchableOpacity
+                        onPress={() => setPasswordVisible(!passwordVisible)}
+                        style={styles.showPasswordButton}>
+                        <Text style={styles.showPasswordText}>{passwordVisible ? "Hide" : "Show"} Password</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.buttonContainer}>
+                    <Button title="Login" color='white' onPress={loginWithFirebase} />
+                    <Button title="Sign Up" color='red' onPress={() => navigation.navigate('SignUp')} />
+
+                </View>
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    background: {
+        flex: 1,
+        backgroundColor: '#000501',
+    },
     form: {
         flex: 1,
-        margin: 30,
+        marginHorizontal: 30,
         marginTop: 60,
+        backgroundColor: '#000501',
+        borderRadius: 10,
     },
     header: {
         fontSize: 30,
         textAlign: 'center',
         paddingBottom: 50,
+        color: '#D5D8E1',
     },
     textInput: {
         borderColor: '#ccc',
@@ -78,7 +93,9 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         paddingVertical: 4,
         paddingHorizontal: 2,
-        textAlignVertical: 'top'
+        textAlignVertical: 'top',
+        backgroundColor: '#D5D8E1',
+        color: 'black',
     },
     buttonContainer: {
         paddingVertical: 30,
@@ -88,5 +105,15 @@ const styles = StyleSheet.create({
     },
     button: {
         width: '40%',
+        color: '#D5D8E1',
+    },
+    showPasswordButton: {
+        position: 'absolute',
+        right: 10,
+        top: 8,
+    },
+    showPasswordText: {
+        color: '#D5D8E1',
+        fontSize: 15,
     },
 });

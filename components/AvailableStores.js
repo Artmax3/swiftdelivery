@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ImageBackground, Button } from 'react-native';
 import storesData from '../data/restro.json';
 import { db, auth } from '../firebaseConfig';
 import { ref, onValue } from 'firebase/database';
@@ -26,29 +26,32 @@ const AvailableStores = ({ navigation }) => {
     }, []);
 
     const renderStoreItem = ({ item }) => (
-        <View>
-            {item.isOpen ? (
-                <TouchableOpacity onPress={() => navigation.navigate('Menu', { store: item })} style={styles.storeItem}>
-                    <Text style={styles.storeName}>{item.name}</Text>
-                    <Text style={styles.storeLocation}>{item.location}</Text>
-                    <Text style={[styles.storeStatus, { color: item.isOpen ? 'green' : 'red' }]}>
-                        {checkIfStoreIsOpen(item)}
-                    </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('CustomerReviews')}>
-                        <Text style={styles.businessProfileButton}>Reviews</Text>
+        <ImageBackground
+            source={{ uri: item.imageURL }}
+            style={styles.storeItem}
+            imageStyle={{ borderRadius: 8 }}
+        >
+            <View style={styles.storeItemContent}>
+                {item.isOpen ? (
+                    <TouchableOpacity onPress={() => navigation.navigate('Menu', { store: item })}>
+                        <Text style={styles.storeName}>{item.name}</Text>
+                        <Text style={styles.storeLocation}>{item.location}</Text>
+                        <Text style={[styles.storeStatus, { color: item.isOpen ? 'green' : 'red' }]}>
+                            {checkIfStoreIsOpen(item)}
+                        </Text>
                     </TouchableOpacity>
+                ) : (
+                    <View style={[styles.storeItem, { backgroundColor: '#eee' }]}>
+                        <Text style={styles.storeName}>{item.name}</Text>
+                        <Text style={styles.storeLocation}>{item.location}</Text>
+                        <Text style={[styles.storeStatus, { color: 'red' }]}>Closed</Text>
+                    </View>
+                )}
+                <TouchableOpacity onPress={() => navigation.navigate('CustomerReviews')}>
+                    <Text style={styles.businessProfileReviewsButton}>Reviews</Text>
                 </TouchableOpacity>
-            ) : (
-                <View style={[styles.storeItem, { backgroundColor: '#eee' }]}>
-                    <Text style={styles.storeName}>{item.name}</Text>
-                    <Text style={styles.storeLocation}>{item.location}</Text>
-                    <Text style={[styles.storeStatus, { color: 'red' }]}>Closed</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('CustomerReviews')}>
-                        <Text style={styles.businessProfileButton}>Reviews</Text>
-                    </TouchableOpacity>
-                </View>
-            )}
-        </View>
+            </View>
+        </ImageBackground>
     );
 
     return (
@@ -66,9 +69,12 @@ const AvailableStores = ({ navigation }) => {
             <FlatList
                 data={stores}
                 renderItem={renderStoreItem}
-                keyExtractor={(item, index) => (item.id || index).toString()} // Provide a default value if id is undefined
+                keyExtractor={(item, index) => (item.id || index).toString()}
                 contentContainerStyle={{ paddingBottom: 20 }}
             />
+
+            <Button title="View Cart" color={"red"} onPress={() => navigation.navigate('Cart')} />
+
         </View>
     );
 };
@@ -77,23 +83,37 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 20,
+        backgroundColor: '#000501',
     },
     header: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
+        marginTop: 20,
+        color: 'white',
+        textAlign: 'center',
     },
     sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 10,
+        color: 'white'
     },
     storeItem: {
+        borderRadius: 8,
+        marginBottom: 10,
+        // opacity: 0.5,
+        overflow: 'hidden',
+    },
+    imageStyle: {
+        opacity: 0.1
+    },
+    storeItemContent: {
         borderWidth: 1,
         borderColor: '#ccc',
-        borderRadius: 8,
+        // opacity:0.5,
         padding: 15,
-        marginBottom: 10,
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
     },
     storeName: {
         fontSize: 18,
@@ -109,9 +129,16 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     businessProfileButton: {
-        fontSize: 13,
-        color: 'blue',
-        fontWeight: 100,
+        fontSize: 15,
+        color: 'white',
+        fontWeight: '100',
+        textDecorationLine: 'underline',
+        marginBottom: 20,
+    },
+    businessProfileReviewsButton: {
+        fontSize: 15,
+        color: 'black',
+        fontWeight: '100',
         textDecorationLine: 'underline',
         marginBottom: 20,
     },

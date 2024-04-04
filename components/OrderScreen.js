@@ -25,9 +25,9 @@ const OrderScreen = ({ route, navigation }) => {
 
   const calculateSubtotal = () => {
     let subtotal = 0;
-    for (const order of orders) {
+    orders.forEach(order => {
       subtotal += (order.price || 0) * (order.quantity || 0);
-    }
+    });
     return subtotal;
   };
 
@@ -47,7 +47,7 @@ const OrderScreen = ({ route, navigation }) => {
 
   const handleCheckout = () => {
     if (!address.trim()) {
-      Alert.alert('Error', 'Please provide both delivery address.');
+      Alert.alert('Error', 'Please provide a delivery address.');
       return;
     }
 
@@ -62,6 +62,12 @@ const OrderScreen = ({ route, navigation }) => {
     });
   };
 
+  const selectAddressFromMap = () => {
+    const simulatedAddress = "1234 Street Name, City, Country";
+    setAddress(simulatedAddress);
+    Alert.alert("Address Selected", simulatedAddress);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
@@ -72,6 +78,7 @@ const OrderScreen = ({ route, navigation }) => {
           onChangeText={setAddress}
           multiline
         />
+        <Button title="Select Address from Map" onPress={selectAddressFromMap} />
         <TextInput
           style={[styles.input, { height: 100 }]}
           placeholder="Delivery Instructions"
@@ -124,16 +131,16 @@ const OrderScreen = ({ route, navigation }) => {
 
       <View style={styles.buttonContainer}>
         <Button title="Schedule Order" onPress={showDatePicker} />
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="datetime"
+          onConfirm={handleConfirmDate}
+          onCancel={hideDatePicker}
+        />
         <Text>
           Scheduled for: {selectedDate ? selectedDate.toLocaleDateString() : 'Not scheduled'}
         </Text>
       </View>
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="datetime"
-        onConfirm={handleConfirmDate}
-        onCancel={hideDatePicker}
-      />
       <Button title="Proceed to Checkout" onPress={handleCheckout} />
     </View>
   );
@@ -143,11 +150,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#D5D8E1',
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    // color: 'white'
   },
   itemContainer: {
     marginBottom: 10,
@@ -168,11 +177,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
+    borderColor: 'white',
+    borderRadius: 5,
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+    backgroundColor: 'white',
   },
   buttonContainer: {
     marginTop: 20,
@@ -184,6 +194,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
+    // color: 'white'
   },
   optionsContainer: {
     flexDirection: 'row',
@@ -194,13 +205,13 @@ const styles = StyleSheet.create({
   },
   option: {
     fontSize: 14,
+    // color: 'white'
   },
   optionSelected: {
     fontSize: 14,
     fontWeight: 'bold',
+    color: '#2B17BF'
   },
 });
 
 export default OrderScreen;
-
-

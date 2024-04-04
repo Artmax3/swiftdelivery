@@ -1,17 +1,73 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { db, auth } from '../firebaseConfig';
+import { ref, get, update, child, remove } from 'firebase/database';
 
-const CartScreen = ({ route, navigation }) => {
-    const [cartItems, setCartItems] = useState(route.params.cartItems.map(item => ({ ...item, quantity: 1 })));
+const Cart = ({ route, navigation }) => {
+    const [cartItems, setCartItems] = useState([]);
 
-    const removeFromCart = (indexToRemove) => {
-        setCartItems(currentItems => currentItems.filter((_, index) => index !== indexToRemove));
+    // Fetch cart items from the database when the component mounts
+    useEffect(() => {
+        const user = auth.currentUser;
+        if (user) {
+            const userID = user.uid;
+            const cartRef = ref(db, `users/${userID}/cartItems`);
+
+            get(cartRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const items = Object.keys(data).map((key) => ({ ...data[key], id: key }));
+                    setCartItems(items);
+                } else {
+                    setCartItems([]);
+                }
+            }).catch((error) => {
+                console.error("Error fetching cart items:", error);
+            });
+        } else {
+            Alert.alert("User Not Logged In!");
+        }
+    }, []);
+
+    const removeFromCart = (id) => {
+        // Remove item from database
+        const user = auth.currentUser;
+        if (user) {
+            const userID = user.uid;
+            const cartItemRef = ref(db, `users/${userID}/cartItems/${id}`);
+            remove(cartItemRef).then(() => {
+                // Update local state after successful removal from database
+                setCartItems(currentItems => currentItems.filter(item => item.id !== id));
+            }).catch((error) => {
+                console.error("Error removing item from cart:", error);
+            });
+        } else {
+            Alert.alert("User Not Logged In!");
+        }
+    };
+
+    const updateQuantityInDatabase = (id, quantity) => {
+        const user = auth.currentUser;
+        if (user) {
+            const userID = user.uid;
+            const cartItemRef = ref(db, `users/${userID}/cartItems/${id}`);
+            update(cartItemRef, { quantity: quantity })
+                .then(() => {
+                    console.log("Quantity updated in database");
+                })
+                .catch((error) => {
+                    console.error("Error updating quantity in database:", error);
+                });
+        } else {
+            Alert.alert("User Not Logged In!");
+        }
     };
 
     const incrementQuantity = (index) => {
         const updatedCartItems = [...cartItems];
         updatedCartItems[index].quantity += 1;
         setCartItems(updatedCartItems);
+        updateQuantityInDatabase(updatedCartItems[index].id, updatedCartItems[index].quantity);
     };
 
     const decrementQuantity = (index) => {
@@ -19,24 +75,22 @@ const CartScreen = ({ route, navigation }) => {
         if (updatedCartItems[index].quantity > 1) {
             updatedCartItems[index].quantity -= 1;
             setCartItems(updatedCartItems);
+            updateQuantityInDatabase(updatedCartItems[index].id, updatedCartItems[index].quantity);
         }
     };
 
     const editQuantity = (index, newQuantity) => {
         const updatedCartItems = [...cartItems];
-        if (newQuantity >= 0) { // Prevent negative quantities
+        if (newQuantity >= 0) {
             updatedCartItems[index].quantity = newQuantity;
             setCartItems(updatedCartItems);
+            updateQuantityInDatabase(updatedCartItems[index].id, updatedCartItems[index].quantity);
         }
-    };
-
-    const goToOrderScreen = () => {
-        navigation.navigate('Order', { orders: cartItems });
     };
 
     const renderItem = ({ item, index }) => (
         <View style={styles.itemContainer}>
-            <Text>{item.name} - {item.price}</Text>
+            <Text>{item.name} - ${item.price}</Text>
             <View style={styles.quantityContainer}>
                 <TouchableOpacity onPress={() => decrementQuantity(index)} style={styles.quantityButton}>
                     <Text style={styles.quantityButtonText}>-</Text>
@@ -51,11 +105,15 @@ const CartScreen = ({ route, navigation }) => {
                     <Text style={styles.quantityButtonText}>+</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={() => removeFromCart(index)} style={styles.actionButton}>
+            <TouchableOpacity onPress={() => removeFromCart(item.id)} style={styles.actionButton}>
                 <Text style={styles.actionButtonText}>Remove</Text>
             </TouchableOpacity>
         </View>
     );
+
+    const goToOrderScreen = () => {
+        navigation.navigate('Order', { orders: cartItems });
+    };
 
     return (
         <View style={styles.container}>
@@ -63,9 +121,9 @@ const CartScreen = ({ route, navigation }) => {
             <FlatList
                 data={cartItems}
                 renderItem={renderItem}
-                keyExtractor={(_, index) => index.toString()}
+                keyExtractor={(item) => item.id}
             />
-            <Button title="Proceed to Checkout" onPress={goToOrderScreen} />
+            <Button title="Proceed to Checkout" color="white" onPress={goToOrderScreen} />
         </View>
     );
 };
@@ -74,17 +132,22 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
+        backgroundColor: '#000501',
     },
     header: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
+        color: 'white',
     },
     itemContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 10,
+        padding: 10,
+        backgroundColor: 'white',
+        borderRadius: '5px',
     },
     quantityContainer: {
         flexDirection: 'row',
@@ -116,4 +179,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CartScreen;
+export default Cart;
